@@ -19,6 +19,7 @@ const promptUser = async () => {
             'Add a Role', 
             'Add an Employee', 
             'Update an Employee Role',
+            'View Total Utilized Budget',
             'Quit'],
         }
     ]);
@@ -49,6 +50,10 @@ const respondUser = async (selections) => {
             return promptAddEmployee();
         // case 'Update an Employee Role':
         //     return updateEmployee();
+        case  'View Total Utilized Budget':
+            const [viewBudget] = await Database.viewBudget();
+            console.table(viewBudget);
+            break;
         case 'Quit':
 			console.log("You have successfully quit the application. Goodbye!");
 			await sleep();
