@@ -20,6 +20,8 @@ const promptUser = async () => {
             'Add an Employee', 
             'Update an Employee Role',
             'View Total Utilized Budget',
+            'View Employees By Manager',
+            'View Employees By Department',
             'Quit'],
         }
     ]);
@@ -55,6 +57,14 @@ const respondUser = async (selections) => {
         case  'View Total Utilized Budget':
             const [viewBudget] = await Database.viewBudget();
             console.table(viewBudget);
+            break;
+        case 'View Employees By Manager':
+            const [viewEmployeesByManager] = await Database.viewEmployees('ORDER BY manager');
+            console.table(viewEmployeesByManager)
+            break;
+        case 'View Employees By Department':
+            const [viewEmployeesByDepartment] = await Database.viewEmployees('ORDER BY department');
+            console.table(viewEmployeesByDepartment)
             break;
         case 'Quit':
 			console.log("You have successfully quit the application. Goodbye!");
@@ -95,6 +105,7 @@ const promptAddRole = async () => {
             type: 'input',
             name: 'salary',
             message: 'Enter the salary for the role you would like to add:',
+            // validate that the user input was a numerical value only
             validate: (salaryInput) => {
                 if(/[0-9]/.test(salaryInput)) {
                 return true
@@ -155,6 +166,7 @@ const promptAddEmployee = async () => {
             name: 'manager_id',
             message: `Who is your new employee's manager?`,
             choices: employeesObjects,
+            // this prompt will only run when the managerConfirm prompt returns true
             when: ({ managerConfirm }) => managerConfirm
         }
     ]);
@@ -200,6 +212,7 @@ const promptUpdateEmployee = async () => {
             name: 'manager_id',
             message: `Who is your employee's new manager?`,
             choices: employeesObjects,
+            // this prompt will only run when the managerConfirm prompt returns true
             when: ({ managerConfirm }) => managerConfirm
         }
     ]);
