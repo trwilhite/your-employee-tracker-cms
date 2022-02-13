@@ -49,8 +49,9 @@ const respondUser = async (selections) => {
         case 'Add an Employee':
             await promptAddEmployee();
             break;
-        // case 'Update an Employee Role':
-        //     return updateEmployee();
+        case 'Update an Employee Role':
+            await promptUpdateEmployee();
+            break;
         case  'View Total Utilized Budget':
             const [viewBudget] = await Database.viewBudget();
             console.table(viewBudget);
@@ -160,6 +161,51 @@ const promptAddEmployee = async () => {
 
     Database.addEmployee([newEmployee.first_name, newEmployee.last_name, newEmployee.role_id, newEmployee.manager_id || null]);
     console.log(`Added ${newEmployee.first_name} to Employees!`)
+}
+
+const promptUpdateEmployee = async () => {
+    const [roles] = await Database.viewRoles();
+    const rolesObjects = roles.map(({ id, title }) => ({
+        name: title,
+        value: id,
+    }));
+
+    const [employees] = await Database.viewEmployees('ORDER BY last_name');
+    const employeesObjects = employees.map(({ id, first_name, last_name }) => ({
+        name: first_name + ' ' + last_name,
+        value: id
+    }));
+
+    const update = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'id',
+            message: `Please select the employee whose role you would like to update:`,
+            choices: employeesObjects
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: `What is your employee's new role?`,
+            choices: rolesObjects
+        },
+        {
+            type: 'confirm',
+            name: 'managerConfirm',
+            message: 'Does your employee have a new manager?',
+            default: true
+        },
+        {
+            type: 'list',
+            name: 'manager_id',
+            message: `Who is your employee's new manager?`,
+            choices: employeesObjects,
+            when: ({ managerConfirm }) => managerConfirm
+        }
+    ]);
+
+    Database.updateEmployee([update.role_id, update.manager_id || null, update.id]);
+    console.log(`Your employee's role has been updated!`)    
 }
 
 promptUser();
