@@ -92,7 +92,14 @@ const promptAddRole = async () => {
         {
             type: 'input',
             name: 'salary',
-            message: 'Enter the salary for the role you would like to add:'
+            message: 'Enter the salary for the role you would like to add:',
+            validate: (salaryInput) => {
+                if(/[0-9]/.test(salaryInput)) {
+                return true
+            } else {
+                console.log('Please enter a numerical value!')
+            }
+        }
         },
         {
             type: 'list',
