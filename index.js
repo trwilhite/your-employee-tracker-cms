@@ -28,8 +28,9 @@ const promptUser = async () => {
         case 'View All Employees':
             Database.viewEmployees();
             break;
-        // case 'Add a Department':
-        //     return addDepartment();
+        case 'Add a Department':
+            promptAddDepartment();
+            break;
         // case 'Add a Role':
         //     return addRole();
         // case 'Add an Employee':
@@ -38,6 +39,18 @@ const promptUser = async () => {
         //     return updateEmployee();
     }
 };
+
+const promptAddDepartment = async () => {
+    const department = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Enter the name of the department you would like to add:'
+        },
+    ]);
+    Database.addDepartment(department);
+    console.log(`Added ${department.name} to Departments!`)
+}
 
 
 promptUser();
