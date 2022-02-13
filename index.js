@@ -41,3 +41,5 @@ const promptUser = async () => {
 
 
 promptUser();
+
+// module.exports = promptUser();
