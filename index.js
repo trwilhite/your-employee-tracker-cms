@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const db = require('./db/connection');
+const Database = require('./lib/Database');
 
 const promptUser = async () => {
     let data = await inquirer.prompt([
@@ -17,22 +17,27 @@ const promptUser = async () => {
             'Update an Employee Role'],
         }
     ]);
+    // respondUser(data.selections);
     switch(data.selections) {
         case 'View All Departments':
-            return viewDepartments();
+            Database.viewDepartments();
+            break;
         case 'View All Roles':
-            return viewRoles();
+            Database.viewRoles();
+            break;
         case 'View All Employees':
-            return viewEmployees();
-        case 'Add a Department':
-            return addDepartment();
-        case 'Add a Role':
-            return addRole();
-        case 'Add an Employee':
-            return addEmployee();
-        case 'Update an Employee Role':
-            return updateEmployee();
+            Database.viewEmployees();
+            break;
+        // case 'Add a Department':
+        //     return addDepartment();
+        // case 'Add a Role':
+        //     return addRole();
+        // case 'Add an Employee':
+        //     return addEmployee();
+        // case 'Update an Employee Role':
+        //     return updateEmployee();
     }
-}
+};
+
 
 promptUser();
