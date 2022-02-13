@@ -47,7 +47,8 @@ const respondUser = async (selections) => {
             await promptAddRole();
             break;
         case 'Add an Employee':
-            return promptAddEmployee();
+            await promptAddEmployee();
+            break;
         // case 'Update an Employee Role':
         //     return updateEmployee();
         case  'View Total Utilized Budget':
@@ -113,7 +114,52 @@ const promptAddRole = async () => {
 }
 
 const promptAddEmployee = async () => {
+    const [roles] = await Database.viewRoles();
+    const rolesObjects = roles.map(({ id, title }) => ({
+        name: title,
+        value: id,
+    }));
 
+    const [employees] = await Database.viewEmployees('ORDER BY last_name');
+    const employeesObjects = employees.map(({ id, first_name, last_name }) => ({
+        name: first_name + ' ' + last_name,
+        value: id
+    }));
+
+    const newEmployee = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'Enter the first name of the employee you would like to add:'
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Enter the last name of the employee you would like to add:',
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: `What is your new employee's role?`,
+            choices: rolesObjects
+        },
+        {
+            type: 'confirm',
+            name: 'managerConfirm',
+            message: 'Does your new employee have a manager?',
+            default: true
+        },
+        {
+            type: 'list',
+            name: 'manager_id',
+            message: `Who is your new employee's manager?`,
+            choices: employeesObjects,
+            when: ({ managerConfirm }) => managerConfirm
+        }
+    ]);
+
+    Database.addEmployee([newEmployee.first_name, newEmployee.last_name, newEmployee.role_id, newEmployee.manager_id || null]);
+    console.log(`Added ${newEmployee.first_name} to Employees!`)
 }
 
 promptUser();
