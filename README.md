@@ -1,4 +1,9 @@
-# your-employee-tracker-cms
+# 12. SQL Challenge: Employee Tracker
+
+## User Story
+AS A business owner
+I WANT to be able to view and manage the departments, roles, and employees in my company
+SO THAT I can organize and plan my business
 
 ## Acceptance Criteria
 ```
@@ -20,3 +25,16 @@ THEN I am prompted to enter the employee’s first name, last name, role, and ma
 WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 ```
+
+## Built With
+* JavaScript
+* Node.js
+* Inquirer
+* MySQL
+
+## Demo
+* Part 1: https://watch.screencastify.com/v/jUR1tRLiIcTTAgbhAbU3
+* Part 2: https://watch.screencastify.com/v/ImM34Qf2QPH1A2whz8x4
+
+## Contributions
+Made with ❤️️ by Tamara Wilhite
